@@ -30,7 +30,6 @@
 //  java.awt.*;  // java界面开发，GUI
 
 
-
 // 导包
 //
 // 语法：
@@ -39,9 +38,6 @@
 //
 // 注意：
 //  import语句必须再类之前定义，可以多条，无序
-
-
-
 
 
 import com.package1.Hello;
@@ -62,11 +58,9 @@ public class Package {
         System.out.println(hello2);
 
 
-
         // 2.lang包是基本包，会自动被引入
         // 如下：System类和Math类都属于lang包，可以直接使用
         System.out.println(Math.PI);// 3.141592653589793
-
 
 
         // 3.导入Arrays类，对数组排序
