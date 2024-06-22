@@ -1,13 +1,12 @@
 package com.airplaneWar.game.obj;
 
-import com.airplaneWar.game.mian.CreateGameObjs;
-import com.airplaneWar.game.mian.GameStart;
-import com.airplaneWar.game.mian.GameUtils;
+import com.airplaneWar.game.gameMian.GameUtils;
 
 import java.awt.*;
 
 public class MySuperBulletObj extends GameObj {
-    // 超级子弹设有血量，用来实现穿透效果
+    // 超级子弹设有血量，用来实现有限制穿透效果
+    // 穿透方式：我方与对方碰撞时，双方血量同时减少
     int HP = 25;
 
     // 创建超级子弹的图片数组
@@ -28,7 +27,6 @@ public class MySuperBulletObj extends GameObj {
         height = 202;
     }
 
-
     public MySuperBulletObj(int x, int y, double speed) {
         super(x, y, speed);
     }
@@ -36,10 +34,9 @@ public class MySuperBulletObj extends GameObj {
 
     // 当前播放图片的下标
     int index = 1;// 由于初始图片为0，这里下标从1开始
-    int direction = 1;
+    int direction = 1;// 表示图片播放的方向
     int waitTime = 2;// 播放等待时间
     int thisWaitTime = 0;// 当前等待时间
-
 
     @Override
     public void paintSelf(Graphics g) {

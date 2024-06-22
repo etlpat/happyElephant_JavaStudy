@@ -1,6 +1,6 @@
 package com.airplaneWar.game.obj;
 
-import com.airplaneWar.game.mian.GameUtils;
+import com.airplaneWar.game.gameMian.GameUtils;
 
 import java.awt.*;
 

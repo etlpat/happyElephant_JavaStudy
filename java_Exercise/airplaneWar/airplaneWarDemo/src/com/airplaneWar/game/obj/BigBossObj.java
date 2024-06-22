@@ -1,10 +1,11 @@
 package com.airplaneWar.game.obj;
 
-import com.airplaneWar.game.mian.CreateGameObjs;
-import com.airplaneWar.game.mian.GameStart;
-import com.airplaneWar.game.mian.GameUtils;
+import com.airplaneWar.game.gameMian.CreateGameObjs;
+import com.airplaneWar.game.gameMian.GameStart;
+import com.airplaneWar.game.gameMian.GameUtils;
 
 import java.awt.*;
+
 
 public class BigBossObj extends GameObj {
     // 一级延时器，用于完整播放我方爆炸效果
@@ -37,15 +38,17 @@ public class BigBossObj extends GameObj {
         if (HP <= 0) {
             // (1)爆炸
             CreateGameObjs.createExplodeObj(x, y, "bigBossExplode");
-
             // (2)消失
             setX(-300);
             setY(1000);
 
             // (3)设置状态为4，表示游戏成功
+            // 一级延时器：HP归零后，画面继续刷新endCount1次，用于完整播放爆炸画面
             thisEndCount1++;
             if (thisEndCount1 >= endCount1) {
-                if (thisEndCount2 < endCount2) {// 若延时器未到，先播放爆炸效果
+                // 当我方飞机爆炸效果完整播放完毕，开始播放全屏爆炸效果
+                if (thisEndCount2 < endCount2) {// 当全部爆炸特效小于endCount2次
+                    // 向屏幕上10个随机位置产生爆炸效果
                     for (int i = 0; i < 10; i++) {
                         CreateGameObjs.createExplodeObj(GameUtils.random.nextInt(512 - 94 + 10),
                                 GameUtils.random.nextInt(768 - 120 + 30), "bigPlaneExplode");
@@ -61,12 +64,13 @@ public class BigBossObj extends GameObj {
 
         } else {// 若血量不为0，boss左右移动
 
-            // 若y不到40，持续向下移动
-            if (y < 40) {
+            // 若y不到0，持续向下移动
+            if (y < 0) {
                 y += speed / 2;
+                HP = initHP;// y<0不掉血（除非碰撞）
             } else {
 
-                // 控制大boss在x方向的运动
+                // 控制大boss在x方向的运动（范围：屏幕左到右）
                 if (directionX == 1) {
                     if (x + width + speed > 512) {
                         directionX = -1;
@@ -78,17 +82,18 @@ public class BigBossObj extends GameObj {
                 }
                 x += directionX * speed;
 
-                // 控制大boss在Y方向的运行
+                // 控制大boss在Y方向的运行（范围：0到100）
+                int speedParameterY = 3;
                 if (directionY == 1) {
-                    if (y + speed > 100) {
+                    if (y + speed / speedParameterY > 100) {
                         directionY = -1;
                     }
                 } else if (directionY == -1) {
-                    if (y - speed < 40) {
+                    if (y - speed / speedParameterY <= 0) {
                         directionY = 1;
                     }
                 }
-                y += directionY * speed / 3;
+                y += directionY * speed / speedParameterY;
             }
 
 

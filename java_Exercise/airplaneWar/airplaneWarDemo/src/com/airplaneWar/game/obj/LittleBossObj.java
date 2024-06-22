@@ -1,8 +1,8 @@
 package com.airplaneWar.game.obj;
 
-import com.airplaneWar.game.mian.CreateGameObjs;
-import com.airplaneWar.game.mian.GameStart;
-import com.airplaneWar.game.mian.GameUtils;
+import com.airplaneWar.game.gameMian.CreateGameObjs;
+import com.airplaneWar.game.gameMian.GameStart;
+import com.airplaneWar.game.gameMian.GameUtils;
 
 import java.awt.*;
 
@@ -47,6 +47,7 @@ public class LittleBossObj extends GameObj {
 
             if (y < 70) {
                 y += speed / 2;
+                HP = initHP; // y<70不掉血（除非碰撞）
             } else {
                 // 若direction = 1，从左向右移动，反之，移动方向相反
                 // 若飞机将要触碰墙壁，方向改变
