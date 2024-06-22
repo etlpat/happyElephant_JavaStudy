@@ -21,6 +21,7 @@ public class MyBullet4Obj extends GameObj {
         if (x < -250 || y > 900 || y < -200 || x > 750) {
             speed = 0;
             GameUtils.removeList.add(this);
+            return;
         }
     }
 }

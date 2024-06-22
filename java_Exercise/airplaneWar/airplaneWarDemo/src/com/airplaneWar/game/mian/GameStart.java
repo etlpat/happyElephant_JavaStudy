@@ -22,6 +22,10 @@ public class GameStart extends JFrame {
     int num = 1;
     // myBulletsNum记录我方子弹发射次数
     int myBulletsNum = 0;
+    // myMaxSuperBulletsNum记录我方一次技能射击最多超级子弹的次数
+    int myMaxSuperBulletsNum = 12;
+    // mySuperBulletsNum记录当前射击超级子弹的次数
+    int mySuperBulletsNum = 0;
 
     // 定义缓存的图片（缓冲以解决闪动问题）
     Image offScreenImage = null;
@@ -83,18 +87,16 @@ public class GameStart extends JFrame {
                         state = 1;
                     }
                 }
+
+                System.out.println(e.getKeyCode());
             }
         });
     }
 
 
-    // 用于清除垃圾对象
+    // 方法：用于清除垃圾对象
     void throwGarbage() {
-//        try {
         GameUtils.allGameObjList.removeAll(GameUtils.removeList);
-//        } catch (ArrayIndexOutOfBoundsException e) {
-//            System.out.println(e);
-//        }
         GameUtils.myBullet1ObjList.removeAll(GameUtils.removeList);
         GameUtils.myBullet2ObjList.removeAll(GameUtils.removeList);
         GameUtils.myBullet3ObjList.removeAll(GameUtils.removeList);
@@ -112,6 +114,7 @@ public class GameStart extends JFrame {
         GameUtils.giftSupplyPlaneArrayList.removeAll(GameUtils.removeList);
         GameUtils.bigBossBullet1List.removeAll(GameUtils.removeList);
         GameUtils.bigBossBullet2List.removeAll(GameUtils.removeList);
+        GameUtils.mySuperBulletObjList.remove(GameUtils.removeList);
         GameUtils.removeList.clear();
     }
 
@@ -133,79 +136,101 @@ public class GameStart extends JFrame {
         // (3)建立循环，用于重复刷新、绘制界面
         while (true) {
 
-            // ①循环事件1：根据循环次数创建GameObj对象
-            //每n次循环，为我方飞机创建一个子弹
+            // 当状态不为2（暂停），才需要重新绘制界面
+            if (state != 2) {
 
-            if (num % 15 == 0) {
-//            if (num % 9 == 0) {
-                myBulletsNum++;
-                CreateGameObjs.createLotOfMyBullets(myPlaneObj, this, myBulletsNum);
-            }
-            //每n次循环，创建一个敌方小飞机
-            if (num % 60 == 0) {
-//            if (num % 9 == 0) {
-                CreateGameObjs.createLotOfEnemySmallPlaneObj(this);
-            }
-            //每n次循环，创建一个敌方大飞机
-            if (num % 70 == 0) {
-//            if (num % 9 == 0) {
-                CreateGameObjs.createLotOfEnemyBigPlaneObj(this);
-            }
-            //每n次循环，所有大飞机发生一次子弹
-            if (num % 40 == 0) {
-//            if (num % 5 == 0) {
-                CreateGameObjs.createLotOfEnemyBigPlaneBulletObj(this);
-            }
-            // 第n次刷新，添加小boss
-            if (num % 250 == 0 && GameUtils.littleBossFlag == false) {
+                // ①循环事件1：根据循环次数创建GameObj对象
+                //每n次循环，为我方飞机创建一个子弹
+                if (myPlaneObj.superStateFlag == false) {
+                    // 当处于普通状态，我方飞机射击普通子弹
+                    if (num % 10 == 0) {
+//                if (num % 5 == 0) {
+                        myBulletsNum++;
+                        CreateGameObjs.createLotOfMyBullets(myPlaneObj, this, myBulletsNum);
+                    }
+                } else {
+                    // 当处于超级状态，我方飞机射击超级子弹
+                    if (mySuperBulletsNum < myMaxSuperBulletsNum) {
+                        // 当目前超级子弹射击的个数未到达最大值，射击超级子弹
+                        if (num % 25 == 0) {
+                            CreateGameObjs.createLotOfMySuperBullets(myPlaneObj);
+                            mySuperBulletsNum++;
+                        }
+                    } else {
+                        // 当射击超级子弹个数到达上限，退出超级状态
+                        myPlaneObj.superStateFlag = false;
+                        mySuperBulletsNum = 0;
+                    }
+                }
+                //每n次循环，创建一个敌方小飞机
+                if (num % 25 == 0) {
+//                if (num % 20 == 0) {
+                    CreateGameObjs.createLotOfEnemySmallPlaneObj(this);
+                }
+                //每n次循环，创建一个敌方大飞机
+                if (num % 50 == 0) {
+//                if (num % 20 == 0) {
+                    CreateGameObjs.createLotOfEnemyBigPlaneObj(this);
+                }
+                //每n次循环，所有大飞机发生一次子弹
+                if (num % 40 == 0) {
+//                if (num % 25 == 0) {
+                    CreateGameObjs.createLotOfEnemyBigPlaneBulletObj(this);
+                }
+                // 第n次刷新，添加小boss
+                if (num % 500 == 0 && GameUtils.littleBossFlag == false) {
 //            if (num % 1 == 0) {
-                CreateGameObjs.createLittleBoss(littleBossObj);
-            }
-            // 每n次刷新，生成小boss子弹
-            if (num % 55 == 0 || num % 55 == 4 || num % 55 == 8) {
+                    CreateGameObjs.createLittleBoss(littleBossObj);
+                }
+                // 每n次刷新，生成小boss子弹
+                if (num % 55 == 0 || num % 55 == 4 || num % 55 == 8) {
 //            if (num % 1 == 0) {
-                CreateGameObjs.createLotOfLittleBossBulletObj(littleBossObj, this);
-            }
-            // 每n次刷新，生成补给飞机
-            if (num % 90 == 0) {
+                    CreateGameObjs.createLotOfLittleBossBulletObj(littleBossObj, this);
+                }
+                // 每n次刷新，生成补给飞机
+                if (num % 80 == 0) {
+//                if (num % 30 == 0) {
+                    CreateGameObjs.createLotOfGiftSupplyPlaneObj(this);
+                }
+                // 第n次刷新，添加大boss
+                if (num % 800 == 0 && GameUtils.bigBossFlag == false
+                        && GameUtils.littleBossFlag == true// 大boss未生成过，且小boss已经被玩家击败
+                        && !GameUtils.allGameObjList.contains(littleBossObj)) {
 //            if (num % 1 == 0) {
-                CreateGameObjs.createLotOfGiftSupplyPlaneObj(this);
-            }
-            // 第n次刷新，添加大boss
-            if (num % 500 == 0 && GameUtils.bigBossFlag == false
-                    && GameUtils.littleBossFlag == true// 大boss未生成过，且小boss已经被玩家击败
-                    && !GameUtils.allGameObjList.contains(littleBossObj)) {
+                    CreateGameObjs.createBigBoss(bigBossObj);
+                }
+                // 第n次刷新，添加大boss子弹1
+                if (num % 70 == 0 || num % 70 == 9 || num % 70 == 18) {
 //            if (num % 1 == 0) {
-                CreateGameObjs.createBigBoss(bigBossObj);
-            }
-            // 第n次刷新，添加大boss子弹1
-            if (num % 50 == 0 || num % 50 == 10) {
+                    CreateGameObjs.createLotOfBigBossBullet1Obj(bigBossObj, this);
+                }
+                // 第n次刷新，添加大boss子弹2
+                if (num % 90 == 0) {
 //            if (num % 1 == 0) {
-                CreateGameObjs.createLotOfBigBossBullet1Obj(bigBossObj, this);
-            }
-            // 第n次刷新，添加大boss子弹2
-            if (num % 90 == 0) {
-//            if (num % 1 == 0) {
-                CreateGameObjs.createLotOfBigBossBullet2Obj(bigBossObj, this);
-            }
+                    CreateGameObjs.createLotOfBigBossBullet2Obj(bigBossObj, this);
+                }
 
-            // ②循环事件2：重新绘制界面
-            repaint();
+
+                // ②循环事件2：重新绘制界面
+                repaint();
 
 
-            // ③循环事件3：清除无用的GameObj对象
-            if (num % 50 == 0) {
-                // 每n次刷新，将要删除的元素从全部中列表中移除
-                throwGarbage();
-                System.out.println("垃圾删除成功");
-            } else {
-                // 每1次循环，将垃圾从allGameObjList中清除（之后就不会再绘制）
-                // 求差集：allGameObjList = allGameObjList - removeList
-//                try {
-                GameUtils.allGameObjList.removeAll(GameUtils.removeList);
-//                } catch (ArrayIndexOutOfBoundsException e) {
-//                    System.out.println(e);
-//                }
+                // ③循环事件3：清除无用的GameObj对象
+                if (num % 50 == 0) {
+                    // 每n次刷新，将要删除的元素从全部中列表中移除
+                    throwGarbage();
+                    System.out.println("垃圾删除成功");
+                } else {
+                    // 每1次循环，将垃圾从allGameObjList中清除（之后就不会再绘制）
+                    // 求差集：allGameObjList = allGameObjList - removeList
+                    GameUtils.allGameObjList.removeAll(GameUtils.removeList);
+
+                }
+
+
+                // 输出allGameObjList中的元素个数（监听代码性能）
+                System.out.println("GameUtils.allGameObjList.size():" + GameUtils.allGameObjList.size());
+
             }
 
 
@@ -216,9 +241,6 @@ public class GameStart extends JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            System.out.println("GameUtils.allGameObjList.size():" + GameUtils.allGameObjList.size());
-
         }
     }
 
@@ -231,9 +253,10 @@ public class GameStart extends JFrame {
         if (offScreenImage == null) {
             offScreenImage = createImage(512, 768);
         }
-        // 获取缓冲图片的画笔
+        // 获取缓冲图片的画笔（向屏幕绘制图片）
         Graphics graphics = offScreenImage.getGraphics();
         graphics.fillRect(0, 0, 512, 768);
+
 
         // 获取随机背景界面
         Image randomBgImage = GameUtils.getRandomBgImage();
@@ -277,12 +300,6 @@ public class GameStart extends JFrame {
                 }
                 gameObj.paintSelf(graphics);
             }
-
-        } else if (state == 2) { // 该状态表示暂停
-            // 绘制背景图
-            graphics.drawImage(bgObj1.getImage(), 0, 0, null);
-            // 在背景图上显示文字
-            GameUtils.drawWord(graphics, "游戏暂停", Color.RED, 50, 155, 300);
 
         } else if (state == 3) { // 该状态表示游戏失败
             // 绘制背景图

@@ -55,6 +55,9 @@ public class GameUtils {
     public static ArrayList<MyBullet4Obj> myBullet4ObjList = new ArrayList<>();
     public static ArrayList<MyBullet5Obj> myBullet5ObjList = new ArrayList<>();
 
+    // 创建我方超级子弹集合
+    public static ArrayList<MySuperBulletObj> mySuperBulletObjList = new ArrayList<>();
+
     // 获取敌方小飞机图片
     public static Image enemySmallPlaneImg1 = Toolkit.getDefaultToolkit().getImage("images/enemy/enemy.png");
 
@@ -169,6 +172,24 @@ public class GameUtils {
                 width : (int) ((width * HP / initHP) * gradientParameter), height - 6);
         // 后画真实血条
         g.setColor(bloodCcolor);
-        g.fillRect(x + 3, y + 3, width * HP / initHP, height - 6);
+        g.fillRect(x + 3, y + 3, width * HP / initHP > width ? width : width * HP / initHP, height - 6);
+    }
+
+    // 该方法用于向屏幕绘制飞机的能量条
+    public static void drawEnergyBar(Graphics g, Color energyCcolor, Color overflowEnergyCcolor,
+                                     int x, int y, int width, int height, int energy, int overflowEnergy) {
+        int blockWidth = 30;
+        // 先画黑条（背景）
+        g.setColor(Color.black);
+        g.fillRect(x, y, width + 6, height);
+        // 再画普通能量条
+        int energyWidth = energy * blockWidth;
+        g.setColor(energyCcolor);
+        g.fillRect(x + 3, y + 3, energyWidth, height - 6);
+        // 最后绘制溢出能量条
+        int overflowEnergyWidth = overflowEnergy * blockWidth;
+        g.setColor(overflowEnergyCcolor);
+        g.fillRect(x + 3 + energyWidth, y + 3, 6 + energyWidth + overflowEnergyWidth >= width
+                ? width - energyWidth : overflowEnergyWidth, height - 6);
     }
 }

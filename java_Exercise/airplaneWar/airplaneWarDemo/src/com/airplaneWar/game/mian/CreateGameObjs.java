@@ -19,23 +19,23 @@ public class CreateGameObjs {
             case 4:
                 // 4能量：兼容3能量，并在侧前方交替发射4、5子弹
                 // （4能量的子弹与3能量的子弹交替，3为左右左右，4为右左右左，组成完整的一排子弹）
-                if (cycleNum % 3 == 1) {
-                    GameUtils.myBullet5ObjList.add(new MyBullet5Obj(GameUtils.myBulletImg5, 53, 53,
-                            myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 53 / 2, myPlaneObj.getY(), speed, gameStart));
-                    GameUtils.allGameObjList.add(GameUtils.myBullet5ObjList.get(GameUtils.myBullet5ObjList.size() - 1));
-                } else if (cycleNum % 3 == 2) {
+                if (cycleNum % 2 == 1) {
                     GameUtils.myBullet4ObjList.add(new MyBullet4Obj(GameUtils.myBulletImg4, 53, 53,
                             myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 53 / 2, myPlaneObj.getY(), speed, gameStart));
                     GameUtils.allGameObjList.add(GameUtils.myBullet4ObjList.get(GameUtils.myBullet4ObjList.size() - 1));
+                } else if (cycleNum % 2 == 0) {
+                    GameUtils.myBullet5ObjList.add(new MyBullet5Obj(GameUtils.myBulletImg5, 53, 53,
+                            myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 53 / 2, myPlaneObj.getY(), speed, gameStart));
+                    GameUtils.allGameObjList.add(GameUtils.myBullet5ObjList.get(GameUtils.myBullet5ObjList.size() - 1));
                 }
 
             case 3:
                 // 3能量：兼容2能量，并在侧前方交替发射4、5子弹
-                if (cycleNum % 3 == 1) {
+                if (cycleNum % 2 == 0) {
                     GameUtils.myBullet4ObjList.add(new MyBullet4Obj(GameUtils.myBulletImg4, 53, 53,
                             myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 53 / 2, myPlaneObj.getY(), speed, gameStart));
                     GameUtils.allGameObjList.add(GameUtils.myBullet4ObjList.get(GameUtils.myBullet4ObjList.size() - 1));
-                } else if (cycleNum % 3 == 2) {
+                } else if (cycleNum % 2 == 1) {
                     GameUtils.myBullet5ObjList.add(new MyBullet5Obj(GameUtils.myBulletImg5, 53, 53,
                             myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 53 / 2, myPlaneObj.getY(), speed, gameStart));
                     GameUtils.allGameObjList.add(GameUtils.myBullet5ObjList.get(GameUtils.myBullet5ObjList.size() - 1));
@@ -44,19 +44,19 @@ public class CreateGameObjs {
             case 2:
                 // 2能量：兼容1能量，并在侧前方交替发射2、3子弹
                 // （2能量的子弹与1能量的子弹交替，2为左右左右，1为右左右左，组成完整的一排子弹）
-                if (cycleNum % 3 == 0) {
-                    GameUtils.myBullet3ObjList.add(new MyBullet3Obj(GameUtils.myBulletImg3, 35, 68,
-                            myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 35 / 2, myPlaneObj.getY() - 15, speed, gameStart));
-                    GameUtils.allGameObjList.add(GameUtils.myBullet3ObjList.get(GameUtils.myBullet3ObjList.size() - 1));
-                } else if (cycleNum % 2 == 1) {
+                if (cycleNum % 2 == 1) {
                     GameUtils.myBullet2ObjList.add(new MyBullet2Obj(GameUtils.myBulletImg2, 35, 68,
                             myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 35 / 2, myPlaneObj.getY() - 15, speed, gameStart));
                     GameUtils.allGameObjList.add(GameUtils.myBullet2ObjList.get(GameUtils.myBullet2ObjList.size() - 1));
+                } else if (cycleNum % 2 == 0) {
+                    GameUtils.myBullet3ObjList.add(new MyBullet3Obj(GameUtils.myBulletImg3, 35, 68,
+                            myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 35 / 2, myPlaneObj.getY() - 15, speed, gameStart));
+                    GameUtils.allGameObjList.add(GameUtils.myBullet3ObjList.get(GameUtils.myBullet3ObjList.size() - 1));
                 }
 
             case 1:
                 // 1能量：兼容0能量，并在侧前方交替发射2、3子弹
-                if (cycleNum % 3 == 0) {
+                if (cycleNum % 2 == 0) {
                     GameUtils.myBullet2ObjList.add(new MyBullet2Obj(GameUtils.myBulletImg2, 35, 68,
                             myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 35 / 2, myPlaneObj.getY() - 15, speed, gameStart));
                     GameUtils.allGameObjList.add(GameUtils.myBullet2ObjList.get(GameUtils.myBullet2ObjList.size() - 1));
@@ -75,6 +75,17 @@ public class CreateGameObjs {
                 // 为allGameObjList列表中添加刚创建的子弹对象
                 GameUtils.allGameObjList.add(GameUtils.myBullet1ObjList.get(GameUtils.myBullet1ObjList.size() - 1));
         }
+    }
+
+
+    // 方法：添加我方超级子弹
+    public static void createLotOfMySuperBullets(MyPlaneObj myPlaneObj) {
+        // 将子弹添加到mySuperBulletObjList列表
+        GameUtils.mySuperBulletObjList.add(new MySuperBulletObj(myPlaneObj.getX() + myPlaneObj.getWidth() / 2 - 273 / 2,
+                myPlaneObj.getY() - 30, 10));
+
+        // 将子弹添加到allGameObjList列表
+        GameUtils.allGameObjList.add(GameUtils.mySuperBulletObjList.get(GameUtils.mySuperBulletObjList.size() - 1));
     }
 
 

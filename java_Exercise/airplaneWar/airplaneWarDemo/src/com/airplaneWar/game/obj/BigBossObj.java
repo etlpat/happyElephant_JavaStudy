@@ -16,7 +16,7 @@ public class BigBossObj extends GameObj {
     int thisEndCount2 = 0;
 
     // 血量
-    int HP = 99999999;
+    int HP = 500;
     int initHP = HP;
 
     // direction用于表示boss移动的方向
@@ -142,6 +142,20 @@ public class BigBossObj extends GameObj {
                     bulletObj.setY(1000);
                     GameUtils.removeList.add(bulletObj);
                     HP--;
+                }
+            }
+
+            // 碰撞检测：我方超级子弹
+            for (MySuperBulletObj bulletObj : GameUtils.mySuperBulletObjList) {
+                if (getGec().intersects(bulletObj.getGec())) {
+                    // 若子弹血量>=飞机血量
+                    if (bulletObj.getHP() >= HP) {
+                        bulletObj.setHP(bulletObj.getHP() - HP);
+                        HP = 0;
+                    } else {// 若飞机血量>子弹血量
+                        HP -= bulletObj.getHP();
+                        bulletObj.setHP(0);
+                    }
                 }
             }
         }

@@ -21,6 +21,7 @@ public class EnemySmallPlaneObj extends GameObj {
         if (x < -250 || y > 900 || y < -200 || x > 750) {
             speed = 0;
             GameUtils.removeList.add(this);
+            return;
         }
 
         // 实现小飞机横向追踪我方飞机
@@ -118,6 +119,23 @@ public class EnemySmallPlaneObj extends GameObj {
                 bulletObj.setX(-300);
                 bulletObj.setY(1000);
                 GameUtils.removeList.add(bulletObj);
+
+                // 敌方小飞机消失
+                CreateGameObjs.createExplodeObj(x, y, "smallPlaneExplode");
+                setX(-300);
+                setY(1000);
+                GameUtils.removeList.add(this);
+
+                // 得分增加
+                GameStart.score += 1;
+            }
+        }
+
+        // 碰撞检测：我方超级子弹
+        for (MySuperBulletObj bulletObj : GameUtils.mySuperBulletObjList) {
+            if (getGec().intersects(bulletObj.getGec())) {
+                // 子弹HP-1
+                bulletObj.setHP(bulletObj.HP - 1);
 
                 // 敌方小飞机消失
                 CreateGameObjs.createExplodeObj(x, y, "smallPlaneExplode");

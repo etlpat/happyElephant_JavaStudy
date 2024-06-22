@@ -5,16 +5,19 @@ import com.airplaneWar.game.mian.GameStart;
 import com.airplaneWar.game.mian.GameUtils;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 // 我方飞机类
 public class MyPlaneObj extends GameObj {
-    int HP = 9999;// 血量
+    int HP = 99999;// 血量
     int initHP = HP;
 
     int energy = 0;// 能量（0-4，可以有5种状态）
     int overflowEnergy = 0;// 溢出能量：当普通能量满了，就增加到溢出能量中
+    int lastEnergy = 0;// 用于记录上一轮的能量
 
     // 一级延时器，用于完整播放我方爆炸效果
     int endCount1 = 10;
@@ -23,6 +26,10 @@ public class MyPlaneObj extends GameObj {
     // 延时器，用于延后失败状态切换时间
     int endCount2 = 20;
     int thisEndCount2 = 0;
+
+    // 判断是否进入超级状态
+    public boolean superStateFlag = false;
+
 
     public MyPlaneObj(Image image, int width, int height, int x, int y, double speed, GameStart frame) {
         super(image, width, height, x, y, speed, frame);
@@ -42,12 +49,81 @@ public class MyPlaneObj extends GameObj {
                 y = e.getY() - height / 4;
             }
         });
+
+
+        // 添加键盘监听事件
+        frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // 当按下Z/z（键码值为90）
+                // 变为超级形态（总能量-4，暂时变成超级子弹）
+                if (e.getKeyCode() == 90) {
+                    if (superStateFlag == false && energy == 4) {
+                        // flag设为true
+                        superStateFlag = true;
+
+                        // 总能量-4
+                        if (overflowEnergy >= 4) {
+                            overflowEnergy -= 4;
+                        } else {
+                            energy -= (4 - overflowEnergy);
+                            overflowEnergy = 0;
+                        }
+                    }
+                }
+
+                System.out.println(e.getKeyCode());
+            }
+        });
+    }
+
+
+    // 方法：当能量增加，飞机变换形态
+    void changeModel() {
+        if (energy != lastEnergy) {
+            // ①改变我方飞机外观
+            if (energy == 0) {
+                image = GameUtils.myPlaneImg1;
+                width = 120;
+                height = 100;
+            } else if (energy == 1) {
+                image = GameUtils.myPlaneImg2;
+                width = 122;
+                height = 105;
+            } else if (energy == 2) {
+                image = GameUtils.myPlaneImg3;
+                width = 122;
+                height = 105;
+            } else if (energy == 3) {
+                image = GameUtils.myPlaneImg4;
+                width = 122;
+                height = 105;
+            } else if (energy == 4) {
+                image = GameUtils.myPlaneImg5;
+                width = 129;
+                height = 120;
+                // 变为4形态，在周围产生爆炸效果
+                int boomRange = -10;// boomRange表示爆炸圈围绕中心的距离（不能为0）
+                CreateGameObjs.createExplodeObj(x + 20, y - 80 + height / boomRange, "bigPlaneExplode");
+                CreateGameObjs.createExplodeObj(x + 20, y + 120 - height / boomRange, "bigPlaneExplode");
+                CreateGameObjs.createExplodeObj(x - 70 + width / boomRange, y, "bigPlaneExplode");
+                CreateGameObjs.createExplodeObj(x + 95 - width / boomRange, y, "bigPlaneExplode");
+                CreateGameObjs.createExplodeObj(x - 45 + width / boomRange, y - 60 + height / boomRange, "bigPlaneExplode");
+                CreateGameObjs.createExplodeObj(x - 45 + width * (boomRange - 1) / boomRange, y - 60 + height / boomRange, "bigPlaneExplode");
+                CreateGameObjs.createExplodeObj(x - 45 + width / boomRange, y - 60 + height * (boomRange - 1) / boomRange, "bigPlaneExplode");
+                CreateGameObjs.createExplodeObj(x - 45 + width * (boomRange - 1) / boomRange, y - 60 + height * (boomRange - 1) / boomRange, "bigPlaneExplode");
+            }
+
+            // ②重新记录上一轮的能量
+            lastEnergy = energy;
+        }
     }
 
 
     @Override
     public void paintSelf(Graphics g) {
         super.paintSelf(g);
+
 
         if (HP <= 0) {
             // 若血量归0，我方飞机爆炸，游戏结束
@@ -71,6 +147,11 @@ public class MyPlaneObj extends GameObj {
 
 
         } else {
+
+            // 飞机随着能量变换形态
+            changeModel();
+
+
             // 碰撞检测：
             //  介绍：用于检测发生碰撞后发生的事件
             //  语法：本对象.getGec().intersects(其它对象.getGec())
@@ -268,8 +349,11 @@ public class MyPlaneObj extends GameObj {
                 }
             }
 
+
             // 绘制血条
             GameUtils.drawLifeBar(g, Color.green, 80, 720, 255, 20, HP, initHP);
+            // 绘制蓝条
+            GameUtils.drawEnergyBar(g, Color.blue, Color.CYAN, 80, 680, 255, 20, energy, overflowEnergy);
         }
 
     }

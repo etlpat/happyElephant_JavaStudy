@@ -22,6 +22,7 @@ public class EnemyBigPlaneObj extends GameObj {
         if (x < -250 || y > 900 || y < -200 || x > 750) {
             speed = 0;
             GameUtils.removeList.add(this);
+            return;
         }
 
         if (HP <= 0) {
@@ -89,6 +90,20 @@ public class EnemyBigPlaneObj extends GameObj {
                     bulletObj.setY(1000);
                     GameUtils.removeList.add(bulletObj);
                     HP--;
+                }
+            }
+
+            // 碰撞检测：我方超级子弹
+            for (MySuperBulletObj bulletObj : GameUtils.mySuperBulletObjList) {
+                if (getGec().intersects(bulletObj.getGec())) {
+                    // 若子弹血量>=飞机血量
+                    if (bulletObj.getHP() >= HP) {
+                        bulletObj.setHP(bulletObj.getHP() - HP);
+                        HP = 0;
+                    } else {// 若飞机血量>子弹血量
+                        HP -= bulletObj.getHP();
+                        bulletObj.setHP(0);
+                    }
                 }
             }
 

@@ -32,6 +32,12 @@ public class GameObj {
         this.y = y;
     }
 
+    public GameObj(int x, int y, double speed) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+    }
+
     public GameObj(Image image, int x, int y, double speed) {
         this.image = image;
         this.x = x;

@@ -21,6 +21,7 @@ public class GiftSupplyPlane extends GameObj {
         if (x < -250 || y > 900 || y < -200 || x > 750) {
             speed = 0;
             GameUtils.removeList.add(this);
+            return;
         }
 
         // 碰撞检测：是否与我方子弹发生碰撞
@@ -102,6 +103,18 @@ public class GiftSupplyPlane extends GameObj {
                 bulletObj.setY(1000);
                 GameUtils.removeList.add(bulletObj);
 
+                // 补给飞机消失
+                CreateGameObjs.createExplodeObj(x, y, "bigPlaneExplode");
+                CreateGameObjs.createRandomGift(x, y, 0);
+                setX(-300);
+                setY(1000);
+                GameUtils.removeList.add(this);
+            }
+        }
+
+        // 碰撞检测：我方超级子弹
+        for (MySuperBulletObj bulletObj : GameUtils.mySuperBulletObjList) {
+            if (getGec().intersects(bulletObj.getGec())) {
                 // 补给飞机消失
                 CreateGameObjs.createExplodeObj(x, y, "bigPlaneExplode");
                 CreateGameObjs.createRandomGift(x, y, 0);
