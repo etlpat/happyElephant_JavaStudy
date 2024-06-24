@@ -167,6 +167,19 @@ public class GameUtils {
     }
 
 
+    public static Color getBabackgroundColor() {
+        if (getRandomBgImage().equals(GameUtils.backgroundImg1)) {
+            return new Color(77, 228, 125, 232);
+        } else if (getRandomBgImage().equals(GameUtils.backgroundImg2)) {
+            return new Color(66, 181, 225, 232);
+        } else if (getRandomBgImage().equals(GameUtils.backgroundImg3)) {
+            return new Color(232, 87, 105, 232);
+        } else if (getRandomBgImage().equals(GameUtils.backgroundImg4)) {
+            return new Color(221, 220, 88, 232);
+        }
+        return new Color(255, 255, 255, 0);
+    }
+
     // 该方法用于向屏幕绘制文字
     public static void drawWord(Graphics g, String word, Color color, int size, int x, int y) {
         g.setColor(color);

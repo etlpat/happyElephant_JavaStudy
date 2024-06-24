@@ -16,26 +16,27 @@ import javax.swing.JFrame;
 
 // 用于绘制排行榜的类
 public class ScoreBoardByOrder extends JFrame implements ActionListener {
+    public static boolean scoreBoardIsOpen = false;
     // 创建按钮对象
-    JButton btReturn = new JButton("返回上一页");
+    JButton btReturn = new JButton("关闭排行榜");
 
 
     public ScoreBoardByOrder(ArrayList<UserScore> userScores) {
+
         // (1)设置初始化参数
         // 设置流式布局
         setLayout(new FlowLayout());
-        add(btReturn);// 添加按钮对象
         // 设置窗口大小
         int myHeight = 500;
         setSize(512, myHeight);
         // 获取屏幕大小
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screenSize.width - getWidth()) / 2;
-        int y = (screenSize.height - getHeight()) / 2 + (758 - myHeight) / 2;
+        int y = (screenSize.height - getHeight()) / 2 - (758 - myHeight) / 2;
         // 设置窗口的位置
         setLocation(x, y); // 注意这里我们假设x轴位置为0，也就是屏幕左侧
         // 设置窗口标题
-        setTitle("airplane war register");
+        setTitle("airplane war score board");
         // 设置关闭窗口时结束进程
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -78,12 +79,16 @@ public class ScoreBoardByOrder extends JFrame implements ActionListener {
 
         // (5)为按钮添加监听器
         btReturn.addActionListener(this);
+
+        add(btReturn);// 添加按钮对象
+        setAlwaysOnTop(true);
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btReturn) {
+            scoreBoardIsOpen = false;
             this.dispose();
         }
     }

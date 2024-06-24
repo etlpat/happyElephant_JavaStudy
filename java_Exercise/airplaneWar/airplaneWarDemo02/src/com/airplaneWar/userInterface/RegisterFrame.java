@@ -1,5 +1,6 @@
 package com.airplaneWar.userInterface;
 
+import com.airplaneWar.game.gameMian.GameUtils;
 import com.airplaneWar.javaBean.User;
 import com.airplaneWar.jdbc.DAO;
 import com.airplaneWar.service.Service;
@@ -11,64 +12,129 @@ import java.awt.event.ActionListener;
 
 public class RegisterFrame extends JFrame implements ActionListener {
     // 定义注册相关对象
-    JLabel lbUsername = new JLabel("请输入用户名");
-    JTextField tfUsername = new JTextField(10);
-    JLabel lbPassword1 = new JLabel("请输入注册密码");
-    JTextField tfPassword1 = new JTextField(10);
-    JLabel lbPassword2 = new JLabel("请再次确认密码");
-    JTextField tfPassword2 = new JTextField(10);
-    JLabel lbSex = new JLabel("请选择性别");
+    JLabel lbTittle = new JLabel("<html><body style='font-size:30px;'><b>注册界面</b></body></html>");
+    JLabel lbUsername = new JLabel("<html><body style='font-size:14px;'><b>请输入用户名:</b></body></html>");
+    JTextField tfUsername = new JTextField(15);
+    JLabel lbPassword1 = new JLabel("<html><body style='font-size:14px;'><b>请输入注册密码:</b></body></html>");
+    JTextField tfPassword1 = new JTextField(15);
+    JLabel lbPassword2 = new JLabel("<html><body style='font-size:14px;'><b>请再次确认密码:</b></body></html>");
+    JTextField tfPassword2 = new JTextField(15);
+    JLabel lbSex = new JLabel("<html><body style='font-size:14px;'><b>请选择性别:&nbsp&nbsp</b></body></html>");
     JRadioButton rbSex1 = new JRadioButton("男", true);// true表示"男"默认被选中
     JRadioButton rbSex2 = new JRadioButton("女", false);
     ButtonGroup bgSex = new ButtonGroup();
-    JLabel lbLevel = new JLabel("请选择您的玩家级别");
+    JLabel lbLevel = new JLabel("<html><body style='font-size:14px;'><b>请选择级别:&nbsp&nbsp&nbsp</b></body></html>");
     JComboBox cbLevel = new JComboBox();
-    JButton btRegister = new JButton("注册");
-    JButton btLogin = new JButton("返回登录");
-    JButton btExit = new JButton("退出");
+    JButton btRegister = new JButton("<html><body style='font-size:14px;'><b>注册</b></body></html>");
+    JButton btLogin = new JButton("<html><body style='font-size:14px;'><b>返回登录</b></body></html>");
+    JButton btExit = new JButton("<html><body style='font-size:14px;'><b>退出</b></body></html>出");
 
 
     public RegisterFrame() {
-        // 设置布局（流式布局）
-        setLayout(new FlowLayout());
-
-        // 为窗体添加对象
-        add(lbUsername);
-        add(tfUsername);
-        add(lbPassword1);
-        add(tfPassword1);
-        add(lbPassword2);
-        add(tfPassword2);
-        add(lbSex);
-        add(rbSex1);
-        add(rbSex2);
-        bgSex.add(rbSex1);// 将单选按钮添加到单选按钮组
-        bgSex.add(rbSex2);
-        add(lbLevel);
-        add(cbLevel);
-        cbLevel.addItem("新手玩家");// 将信息添加到组合框
-        cbLevel.addItem("中级玩家");
-        cbLevel.addItem("高级玩家");
-        cbLevel.addItem("传奇玩家");
-        add(btRegister);
-        add(btLogin);
-        add(btExit);
-
-        // 设置窗口可见
-        setVisible(true);
+        // 设置布局
+        setLayout(null);
         // 设置窗口大小
         setSize(512, 768);
         // 设置窗口位置
         setLocationRelativeTo(null);
         // 设置窗口标题
-        setTitle("airplane war login");
+        setTitle("airplane war register");
         // 设置关闭窗口时结束进程
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        // 设置全局JPanel参数
+        Color color = GameUtils.getBabackgroundColor();
+        int y0 = 80, y1 = 200, y2 = 270, y3 = 320, y4 = 390, y5 = 450, y6 = 550;
+
+
+        // 添加背景JPanel
+        JPanel bgJP = new JPanel();
+        bgJP.setLayout(null);
+        bgJP.setBackground(color);
+        setContentPane(bgJP);// 将bgJP填充到背景
+
+
+        // 添加标题JPanel
+        JPanel tittleJP = new JPanel();
+        tittleJP.setBounds(0, y0, 512, 80);
+        tittleJP.setBackground(color);
+        tittleJP.add(lbTittle);
+        bgJP.add(tittleJP);
+
+
+        // 添加用户名JPanel
+        tfUsername.setPreferredSize(new Dimension(0, 35));
+        JPanel usernameJP = new JPanel();
+        usernameJP.setBounds(0, y1, 512, 40);
+        usernameJP.setBackground(color);
+        usernameJP.add(lbUsername);
+        usernameJP.add(tfUsername);
+        bgJP.add(usernameJP);
+
+
+        // 添加密码1的JPanel
+        tfPassword1.setPreferredSize(new Dimension(0, 35));
+        JPanel password1JP = new JPanel();
+        password1JP.setBounds(0, y2, 512, 40);
+        password1JP.setBackground(color);
+        password1JP.add(lbPassword1);
+        password1JP.add(tfPassword1);
+        bgJP.add(password1JP);
+
+
+        // 添加密码2的JPanel
+        tfPassword2.setPreferredSize(new Dimension(0, 35));
+        JPanel password2JP = new JPanel();
+        password2JP.setBounds(0, y3, 512, 40);
+        password2JP.setBackground(color);
+        password2JP.add(lbPassword2);
+        password2JP.add(tfPassword2);
+        bgJP.add(password2JP);
+
+
+        // 添加性别的JPanel
+        JPanel sexJP = new JPanel();
+        sexJP.setBounds(0, y4, 512, 40);
+        sexJP.setBackground(color);
+        sexJP.add(lbSex);
+        sexJP.add(rbSex1);
+        sexJP.add(rbSex2);
+        bgSex.add(rbSex1);// 将按钮添加到单选框
+        bgSex.add(rbSex2);
+        bgJP.add(sexJP);
+
+
+        // 添加级别的JPanel
+        JPanel levelJP = new JPanel();
+        levelJP.setBounds(0, y5, 512, 40);
+        levelJP.setBackground(color);
+        levelJP.add(lbLevel);
+        levelJP.add(cbLevel);
+        cbLevel.addItem("新手玩家");// 将信息添加到组合框
+        cbLevel.addItem("中级玩家");
+        cbLevel.addItem("高级玩家");
+        cbLevel.addItem("传奇玩家");
+        bgJP.add(levelJP);
+
+
+        // 添加按钮JPanel
+        JPanel buttonJP = new JPanel();
+        buttonJP.setBounds(0, y6, 512, 40);
+        buttonJP.setBackground(color);
+        buttonJP.add(btRegister);
+        buttonJP.add(btLogin);
+        buttonJP.add(btExit);
+        bgJP.add(buttonJP);
+
 
         // 为按钮添加动作监听
         btRegister.addActionListener(this);
         btLogin.addActionListener(this);
         btExit.addActionListener(this);
+
+        // 设置窗口可见
+        setVisible(true);
     }
 
 
@@ -139,5 +205,10 @@ public class RegisterFrame extends JFrame implements ActionListener {
             // 结束程序运行
             System.exit(0);
         }
+    }
+
+
+    public static void main(String[] args) {
+        new RegisterFrame();
     }
 }
