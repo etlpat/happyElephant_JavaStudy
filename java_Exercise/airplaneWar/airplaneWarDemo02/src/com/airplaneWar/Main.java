@@ -4,7 +4,7 @@ package com.airplaneWar;
 import com.airplaneWar.game.gameMian.GameStart;
 import com.airplaneWar.javaBean.LoginUser;
 import com.airplaneWar.javaBean.UserScore;
-import com.airplaneWar.sound.PlayGameBgmSound;
+import com.airplaneWar.playSound.PlayGameBgmSound;
 import com.airplaneWar.userInterface.AfterGameMenu;
 import com.airplaneWar.userInterface.LoginFrame;
 
