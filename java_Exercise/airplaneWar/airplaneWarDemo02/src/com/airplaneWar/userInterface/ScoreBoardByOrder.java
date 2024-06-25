@@ -43,14 +43,15 @@ public class ScoreBoardByOrder extends JFrame implements ActionListener {
 
         // (2)获取表格数据
         // 定义表格的列名
-        String[] colNames = {"用户名", "游戏时间记录", "分数", "飞行距离"};
+        String[] colNames = {"排名", "用户名", "游戏时间记录", "分数", "飞行距离"};
         // 定义表行中的数据
         String[][] data = new String[userScores.size()][colNames.length];
         for (int i = 0; i < userScores.size(); i++) {
-            data[i][0] = userScores.get(i).getUsername();
-            data[i][1] = userScores.get(i).getGameDateTime().substring(0, userScores.get(i).getGameDateTime().length() - 2);
-            data[i][2] = String.valueOf(userScores.get(i).getScore());
-            data[i][3] = String.valueOf(userScores.get(i).getFlyDistance());
+            data[i][0] = i + 1 + "";
+            data[i][1] = userScores.get(i).getUsername();
+            data[i][2] = userScores.get(i).getGameDateTime().substring(0, userScores.get(i).getGameDateTime().length() - 2);
+            data[i][3] = String.valueOf(userScores.get(i).getScore());
+            data[i][4] = String.valueOf(userScores.get(i).getFlyDistance());
         }
 
 
