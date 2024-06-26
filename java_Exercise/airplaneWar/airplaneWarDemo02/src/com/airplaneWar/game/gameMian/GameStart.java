@@ -283,9 +283,7 @@ public class GameStart extends JFrame {
             graphics.drawImage(GameUtils.myPlaneImg1, 190, 520, null);
 
             // 设置并添加开始界面文字
-            graphics.setColor(Color.white);// 设置文字颜色
-            graphics.setFont(new Font("楷书", Font.BOLD, 40));// 设置字体
-            graphics.drawString("点击屏幕开始游戏", 95, 300);// 设置文本内容、位置
+            GameUtils.drawWord(graphics, "点击屏幕开始游戏", Color.white, 40, 95, 300);
 
 
         } else if (state == 1) {// 该状态变为游戏开始
