@@ -47,7 +47,7 @@ public class GameStart extends JFrame {
 
     // 小boss成员
     LittleBossObj littleBossObj = new LittleBossObj(GameUtils.littleBossImg, 200, 140,
-            (512 - 200) / 2, -100, 5, this);
+            (512 - 200) / 2, -141, 5, this);
 
     // 大boss成员
     BigBossObj bigBossObj = new BigBossObj(GameUtils.bigBossImg, 200, 302,
