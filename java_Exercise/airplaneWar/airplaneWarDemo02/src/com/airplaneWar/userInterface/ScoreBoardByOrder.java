@@ -1,7 +1,6 @@
 package com.airplaneWar.userInterface;
 
 import com.airplaneWar.javaBean.UserScore;
-import com.airplaneWar.jdbc.DAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

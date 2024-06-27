@@ -33,6 +33,8 @@ public class GameStart extends JFrame {
 
     // 定义缓存的图片（缓冲以解决闪动问题）
     Image offScreenImage = null;
+    // 定义双缓存画笔对象
+    Graphics graphics = null;
 
     // 背景成员，用于绘制游戏开始后的背景
     BackgroundObj bgObj1 = new BackgroundObj(GameUtils.getRandomBgImage(), 0, 0, 2);
@@ -49,7 +51,7 @@ public class GameStart extends JFrame {
 
     // 大boss成员
     BigBossObj bigBossObj = new BigBossObj(GameUtils.bigBossImg, 200, 302,
-            (512 - 200) / 2, -320, 5, this);
+            (512 - 200) / 2, -303, 5, this);
 
 
     // 方法：设置JFrame窗口的配置信息
@@ -109,7 +111,7 @@ public class GameStart extends JFrame {
         GameUtils.myBullet3ObjList.removeAll(GameUtils.removeList);
         GameUtils.myBullet4ObjList.removeAll(GameUtils.removeList);
         GameUtils.myBullet5ObjList.removeAll(GameUtils.removeList);
-        GameUtils.mySuperBulletObjList.remove(GameUtils.removeList);
+        GameUtils.mySuperBulletObjList.removeAll(GameUtils.removeList);
         GameUtils.enemySmallPlaneList.removeAll(GameUtils.removeList);
         GameUtils.enemyBigPlaneList.removeAll(GameUtils.removeList);
         GameUtils.enemyBigPlaneBulletList.removeAll(GameUtils.removeList);
@@ -122,6 +124,7 @@ public class GameStart extends JFrame {
         GameUtils.giftSupplyPlaneArrayList.removeAll(GameUtils.removeList);
         GameUtils.bigBossBullet1List.removeAll(GameUtils.removeList);
         GameUtils.bigBossBullet2List.removeAll(GameUtils.removeList);
+        // 清除完所有列表中的垃圾对象后，即可清空removeList列表
         GameUtils.removeList.clear();
     }
 
@@ -233,10 +236,31 @@ public class GameStart extends JFrame {
                 }
 
 
-                // 输出allGameObjList中的元素个数（监视代码性能）
-                System.out.println("GameUtils.allGameObjList.size():" + GameUtils.allGameObjList.size());
+                // 输出所以列表中的元素个数（监视代码性能）
+                System.out.println("allGameObjList.size()=" + GameUtils.allGameObjList.size() +
+                        "; (" +
+                        GameUtils.myBullet1ObjList.size() + "," +
+                        GameUtils.myBullet2ObjList.size() + "," +
+                        GameUtils.myBullet3ObjList.size() + "," +
+                        GameUtils.myBullet4ObjList.size() + "," +
+                        GameUtils.myBullet5ObjList.size() + "," +
+                        GameUtils.mySuperBulletObjList.size() + "," +
+                        GameUtils.enemySmallPlaneList.size() + "," +
+                        GameUtils.enemyBigPlaneList.size() + "," +
+                        GameUtils.enemyBigPlaneBulletList.size() + "," +
+                        GameUtils.littleBossBulletList.size() + "," +
+                        GameUtils.explodeObjList.size() + "," +
+                        GameUtils.gift1List.size() + "," +
+                        GameUtils.gift2List.size() + "," +
+                        GameUtils.gift3List.size() + "," +
+                        GameUtils.allGiftList.size() + "," +
+                        GameUtils.giftSupplyPlaneArrayList.size() + "," +
+                        GameUtils.bigBossBullet1List.size() + "," +
+                        GameUtils.bigBossBullet2List.size() +
+                        ",[all:" + GameUtils.allGameObjList.size() +
+                        "],[remove:" + GameUtils.removeList.size() + "])"
+                );
             }
-
 
             // ④循环事件4：使线程休眠一定时间
             try {
@@ -258,22 +282,23 @@ public class GameStart extends JFrame {
     //      launch中的repaint()方法，就是调用该方法
     @Override
     public void paint(Graphics g) {
-        // (1)获取初始化变量(所有状态通用)
-        //    若缓存图片为空，创建缓存图片
+        // (1)创建缓存图片、双缓存画笔对象，用于向屏幕绘制图片
+        //  （1局游戏只创建1次）
         if (offScreenImage == null) {
+            // 若缓存图片为空，创建缓存图片（用于缓存双缓存画笔对象绘制的图像）
             offScreenImage = createImage(512, 768);
         }
-        // 获取缓冲图片的画笔（向屏幕绘制图片）
-        Graphics graphics = offScreenImage.getGraphics();
-        graphics.fillRect(0, 0, 512, 768);
-
-
-        // 获取随机背景界面
-        Image randomBgImage = GameUtils.getRandomBgImage();
+        if (graphics == null) {
+            // 若双缓存画笔对象为空，获取缓存图片对应的双缓存画笔（向屏幕绘制图片，解决闪动问题）
+            graphics = offScreenImage.getGraphics();
+            graphics.fillRect(0, 0, 512, 768);
+        }
 
 
         // (2)进行游戏状态判断，并执行对应功能
         if (state == 0) {// 当游戏未开始
+            // 获取随机背景界面
+            Image randomBgImage = GameUtils.getRandomBgImage();
             // 为JFrame窗体设置背景图片
             graphics.drawImage(randomBgImage, 0, 0, null);
 

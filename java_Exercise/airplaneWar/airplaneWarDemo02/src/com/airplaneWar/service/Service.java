@@ -11,7 +11,7 @@ import java.util.ArrayList;
 // 用于处理登录、注册时的各种判断
 public class Service {
 
-    // 方法：用于判断注册信息是否重复
+    // 方法：判断注册信息是否重复
     // （判断用户名是否在数据库中重名）
     public static boolean isRegisterInfoCorrect(User user) {
         ArrayList<User> users = DAO.getAirplaneUsersAll();
@@ -33,6 +33,7 @@ public class Service {
     }
 
 
+    // 方法：判断登录信息设否正确
     public static boolean isLoginInfoCorrect(LoginUser user) {
         ArrayList<User> users = DAO.getAirplaneUsersAll();
 
@@ -53,6 +54,5 @@ public class Service {
         // 若登录信息与表中所有用户均不同，返回false
         return false;
     }
-
 
 }
