@@ -76,12 +76,12 @@ public class ScoreBoardByOrder extends JFrame implements ActionListener {
 
         // (4)设置表格为可见的
         setVisible(true);
+        // 设置排行榜在其它窗口顶层
+        setAlwaysOnTop(true);
 
         // (5)为按钮添加监听器
         btReturn.addActionListener(this);
-
         add(btReturn);// 添加按钮对象
-        setAlwaysOnTop(true);
     }
 
 

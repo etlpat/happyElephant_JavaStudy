@@ -12,7 +12,8 @@ import java.awt.event.MouseEvent;
 
 // 我方飞机类
 public class MyPlaneObj extends GameObj {
-    int HP = 30;// 血量
+//    int HP = 30;// 血量
+    int HP = 50;// 血量
     int initHP = HP;
 
     int energy = 0;// 能量（0-4，可以有5种状态）

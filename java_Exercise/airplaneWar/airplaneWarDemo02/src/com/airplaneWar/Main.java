@@ -17,6 +17,7 @@ public class Main {
     // loginUser用于获取本次开启游戏的loginUser
     public static LoginUser loginUser = null;
 
+
     public static void main(String[] args) {
         // 创建音乐播放器对象
         Clip bgmClip = null;

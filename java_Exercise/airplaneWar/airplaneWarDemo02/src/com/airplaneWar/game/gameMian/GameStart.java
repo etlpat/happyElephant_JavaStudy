@@ -193,7 +193,8 @@ public class GameStart extends JFrame {
                     CreateGameObjs.createLotOfEnemyBigPlaneBulletObj(this);
                 }
                 // 第n次刷新，添加小boss
-                if (num % 500 == 0 && GameUtils.littleBossFlag == false) {
+//                if (num % 500 == 0 && GameUtils.littleBossFlag == false) {
+                if (num % 200 == 0 && GameUtils.littleBossFlag == false) {
                     CreateGameObjs.createLittleBoss(littleBossObj);
                 }
                 // 每n次刷新，生成小boss子弹
@@ -201,11 +202,13 @@ public class GameStart extends JFrame {
                     CreateGameObjs.createLotOfLittleBossBulletObj(littleBossObj, this);
                 }
                 // 每n次刷新，生成补给飞机
-                if (num % 80 == 0) {
+//                if (num % 80 == 0) {
+                if (num % 50 == 0) {
                     CreateGameObjs.createLotOfGiftSupplyPlaneObj(this);
                 }
                 // 第n次刷新，添加大boss
-                if (num % 800 == 0 && GameUtils.bigBossFlag == false
+//                if (num % 800 == 0 && GameUtils.bigBossFlag == false
+                if (num % 250 == 0 && GameUtils.bigBossFlag == false
                         && GameUtils.littleBossFlag == true// 大boss未生成过，且小boss已经被玩家击败
                         && !GameUtils.allGameObjList.contains(littleBossObj)) {
                     CreateGameObjs.createBigBoss(bigBossObj);
@@ -271,6 +274,7 @@ public class GameStart extends JFrame {
             }
         }
 
+        // 循环结束
         System.out.println("游戏结束");
         // 将Main中的flag设置为false
         Main.flag = false;

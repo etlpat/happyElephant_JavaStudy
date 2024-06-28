@@ -173,32 +173,32 @@ public class CreateGameObjs {
     }
 
 
-    // 方法：用于创建补给品1
+    // 方法：用于创建补给品1（能量补给）
     public static void createGift1(int x, int y) {
         Gift1Obj gift1Obj = new Gift1Obj(GameUtils.giftImg1, 61, 58, x, y, 3);
         // 将补给添加到对应补给的列表（用于遍历实现碰撞）
         GameUtils.gift1List.add(gift1Obj);
-        // 将补给添加到全部补给的列表（用于添加到allGameObjList中）
+        // 将补给添加到全部补给的列表（用于添加到allGiftList中）
         GameUtils.allGiftList.add(gift1Obj);
     }
 
 
-    // 方法：用于创建补给品2
+    // 方法：用于创建补给品2（血量补给）
     public static void createGift2(int x, int y) {
         Gift2Obj gift2Obj = new Gift2Obj(GameUtils.giftImg2, 80, 45, x, y, 3);
         // 将补给添加到对应补给的列表（用于遍历实现碰撞）
         GameUtils.gift2List.add(gift2Obj);
-        // 将补给添加到全部补给的列表（用于添加到allGameObjList中）
+        // 将补给添加到全部补给的列表（用于添加到allGiftList中）
         GameUtils.allGiftList.add(gift2Obj);
     }
 
 
-    // 方法：用于创建补给品3
+    // 方法：用于创建补给品3（分数补给）
     public static void createGift3(int x, int y) {
         Gift3Obj gift3Obj = new Gift3Obj(GameUtils.giftImg3, 40, 41, x, y, 3);
         // 将补给添加到对应补给的列表（用于遍历实现碰撞）
         GameUtils.gift3List.add(gift3Obj);
-        // 将补给添加到全部补给的列表（用于添加到allGameObjList中）
+        // 将补给添加到全部补给的列表（用于添加到allGiftList中）
         GameUtils.allGiftList.add(gift3Obj);
     }
 
@@ -209,11 +209,11 @@ public class CreateGameObjs {
         // （randomNothingNum为0时，一定会随机到补给）
 
         int r = GameUtils.random.nextInt(4 + randomNothingNum * 4);
-        if (r == 0) {
+        if (r == 0 || r == 1) {// 能量补给
             createGift1(x, y);
-        } else if (r == 1) {
+        } else if (r == 2) {// 血量补给
             createGift2(x, y);
-        } else if (r == 2 || r == 3) {
+        } else if (r == 3) {// 分数补给
             createGift3(x, y);
         } else {
             return false;
