@@ -8,8 +8,7 @@ import java.awt.*;
 
 public class LittleBossObj extends GameObj {
 
-//    int HP = 200;
-    int HP = 30;
+    int HP = 200;
     int initHP = HP;
 
     public LittleBossObj(Image image, int width, int height, int x, int y, double speed, GameStart frame) {

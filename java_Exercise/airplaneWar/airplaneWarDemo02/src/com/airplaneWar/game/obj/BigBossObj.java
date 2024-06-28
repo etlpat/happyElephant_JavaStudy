@@ -17,8 +17,7 @@ public class BigBossObj extends GameObj {
     int thisEndCount2 = 0;
 
     // 血量
-//    int HP = 500;
-    int HP = 175;
+    int HP = 500;
     int initHP = HP;
 
     // direction用于表示boss移动的方向

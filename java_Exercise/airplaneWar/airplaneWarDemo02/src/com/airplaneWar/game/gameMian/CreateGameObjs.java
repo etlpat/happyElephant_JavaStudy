@@ -209,11 +209,11 @@ public class CreateGameObjs {
         // （randomNothingNum为0时，一定会随机到补给）
 
         int r = GameUtils.random.nextInt(4 + randomNothingNum * 4);
-        if (r == 0 || r == 1) {// 能量补给
+        if (r == 0) {// 能量补给
             createGift1(x, y);
-        } else if (r == 2) {// 血量补给
+        } else if (r == 1) {// 血量补给
             createGift2(x, y);
-        } else if (r == 3) {// 分数补给
+        } else if (r == 2 || r == 3) {// 分数补给
             createGift3(x, y);
         } else {
             return false;
