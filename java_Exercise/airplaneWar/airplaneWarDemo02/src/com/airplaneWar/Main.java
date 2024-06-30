@@ -11,6 +11,9 @@ import com.airplaneWar.userInterface.LoginFrame;
 import javax.sound.sampled.Clip;
 
 
+// Main是用于运行完整飞机大战项目的主函数（用户界面+飞机大战游戏+音乐播放）
+// 注意：(1)若是想在你的电脑上运行，请将以下文件中MySQL的用户密码修改为你的电脑对应的密码（com/airplaneWar/jdbc/JDBCUtil.java）
+//      (2)若是你的电脑上没有MySQL环境，请直接运行以下文件（仅启动飞机大战游戏部分）（com/airplaneWar/game/gameMian/GameStart.java）
 public class Main {
     // flag为false，表示游戏未开启
     public static boolean flag = false;
