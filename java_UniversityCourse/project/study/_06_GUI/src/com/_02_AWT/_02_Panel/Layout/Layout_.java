@@ -63,7 +63,7 @@ public class Layout_ {
         Button button6 = new Button("button6");
 
 
-        // (1)流式布局
+////         (1)流式布局
 //        //frame.setLayout(new FlowLayout());// 默认居中
 //        frame.setLayout(new FlowLayout(FlowLayout.LEFT));// 向左对齐
 //        //frame.setLayout(new FlowLayout(FlowLayout.CENTER));// 居中
@@ -76,7 +76,7 @@ public class Layout_ {
 //        frame.add(button6);
 
 
-        // (2)东西南北中布局
+////         (2)东西南北中布局
 //        frame.add(button1, BorderLayout.EAST);
 //        frame.add(button2, BorderLayout.WEST);
 //        frame.add(button3, BorderLayout.SOUTH);
@@ -84,7 +84,7 @@ public class Layout_ {
 //        frame.add(button5, BorderLayout.CENTER);
 
 
-        // (3)表格布局
+////         (3)表格布局
 //        frame.setLayout(new GridLayout(2, 2));// 规定行列，按行优先
 //        //frame.setLayout(new GridLayout());// 默认一行
 //        frame.add(button1);

@@ -1,4 +1,4 @@
-CREATE TABLE airplaneUsers(
+`test_db`CREATE TABLE airplaneUsers(
 	`username` VARCHAR(32) PRIMARY KEY,
 	`password` VARCHAR(32),
 	sex VARCHAR(8),
@@ -47,3 +47,7 @@ SELECT * FROM airplaneScoreBoard
 	
 	
 SELECT * FROM airplaneScoreBoard;
+
+
+
+
