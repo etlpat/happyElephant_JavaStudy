@@ -37,5 +37,4 @@ package _05_iteratorPattern;
 
 
 public class IteratorPattern {
-
 }
