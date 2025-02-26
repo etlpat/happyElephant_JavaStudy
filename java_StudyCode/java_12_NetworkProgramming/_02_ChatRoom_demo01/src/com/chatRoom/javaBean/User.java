@@ -1,6 +1,7 @@
 package com.chatRoom.javaBean;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 // 实体类User通过io流传输，必须继承Serializable序列化接口
@@ -14,6 +15,8 @@ public class User implements Serializable {
     private ChatStatus chatStatus;// 枚举类型消息状态
     private String sender;// 发送人
     private String receiver;// 接收人
+    private byte[] fileBytes;// 文件的字节数组
+    private String fileName;// 文件名
 
 
     public User(String username, String password) {
@@ -23,6 +26,7 @@ public class User implements Serializable {
 
     public User() {
     }
+
 
     @Override
     public String toString() {
@@ -34,8 +38,26 @@ public class User implements Serializable {
                 ", chatContent=" + chatContent +
                 ", chatStatus=" + chatStatus +
                 ", sender='" + sender + '\'' +
-                ", reciver='" + receiver + '\'' +
+                ", receiver='" + receiver + '\'' +
+                ", fileBytes=" + Arrays.toString(fileBytes) +
+                ", fileName='" + fileName + '\'' +
                 '}';
+    }
+
+    public byte[] getFileBytes() {
+        return fileBytes;
+    }
+
+    public void setFileBytes(byte[] fileBytes) {
+        this.fileBytes = fileBytes;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getUsername() {

@@ -13,9 +13,14 @@ import com.chatRoom.javaBean.OnlineUname;
 import com.chatRoom.javaBean.User;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
 
 // 客户端开一个线程，用于一直读消息
 public class ClientHandler extends Thread {
@@ -54,6 +59,8 @@ public class ClientHandler extends Thread {
                         handleShake(user);// 调用处理抖动请求的方法
                     } else if (user.getChatStatus() == ChatStatus.ULIST) {// 此时为更新用户列表状态
                         handleUList(user);
+                    } else if (user.getChatStatus() == ChatStatus.SEND_FILE) {// 此时为发送文件状态
+                        handleSendFile(user);
                     }
                 }
 
@@ -74,7 +81,7 @@ public class ClientHandler extends Thread {
             // ②关闭用户登录界面
             clientLogin.dispose();
         } else {// 若用户不存在->登录失败
-            System.out.println("登录失败");
+            JOptionPane.showMessageDialog(null, "登录失败！");// 打印提示信息
         }
     }
 
@@ -82,7 +89,7 @@ public class ClientHandler extends Thread {
     // (2)用于处理系统提示结果
     private void handleNotice(User user) {
         // 将用户的通知信息String转换为FontStyle列表
-        List<FontStyle> fontStyles = FontSupportUtil.stringToFontStyleList(user.getNotice() + "\n");
+        List<FontStyle> fontStyles = FontSupportUtil.stringToFontStyleList(">>>" + user.getNotice() + "\n");
 
         // 将列表中的内容打印到接收框上（拼接到接收框文本末尾）
         FontSupportUtil.fontStyleListToPane(clientChat.getAcceptPane(), fontStyles);
@@ -145,6 +152,36 @@ public class ClientHandler extends Thread {
         if (!receiver.equals("ALL") && !isReceiverExist) {
             clientChat.setReceiver("ALL");
             receiverBox.setSelectedItem("所有人");
+        }
+    }
+
+
+    // (6)用于接收文件
+    public void handleSendFile(User user) throws IOException {
+        JFileChooser jFileChooser = new JFileChooser();// 创建文件选择器
+        jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);// 只能选择文件夹
+        int state = jFileChooser.showDialog(new Label(), "保存文件");// 打开文件选择窗体，并返回状态
+        if (state == JFileChooser.CANCEL_OPTION) {// 若取消
+            JOptionPane.showMessageDialog(null, "接收者取消下载！");// 打印提示信息
+            return;
+        } else {
+            // ①接收发送过来的文件
+            File selectedFile = jFileChooser.getSelectedFile();// 获取被选中的目录（文件的存放位置）
+            String absolutePath = selectedFile.getAbsolutePath();// 获取保存目录的绝对路径
+            File file = new File(absolutePath, user.getFileName());// 创建要保存的文件
+            FileOutputStream fileOutputStream = new FileOutputStream(file);// 获取输出流
+            fileOutputStream.write(user.getFileBytes());// 将用户传输的文件的bytes，写入该目标文件中
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            JOptionPane.showMessageDialog(null, "接收者成功下载文件！");// 打印提示信息
+
+            // ②将下载成功的消息回显给发送者
+            User user1 = new User();
+            user1.setChatStatus(ChatStatus.NOTICE);
+            user1.setSender(user.getReceiver());
+            user1.setReceiver(user.getSender());
+            user1.setNotice(username + "成功接收了" + user.getSender() + "的文件：" + user.getFileName());
+            IOStreamUtil.writeMessage(socket, user1);
         }
     }
 }

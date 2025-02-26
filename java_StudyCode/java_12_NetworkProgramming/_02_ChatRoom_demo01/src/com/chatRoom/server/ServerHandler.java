@@ -7,6 +7,9 @@ import com.chatRoom.jdbc.DAO;
 import com.chatRoom.server.view.ServerFrame;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +55,8 @@ public class ServerHandler extends Thread {
                         handleShake(user);// 调用处理抖动请求的方法
                     } else if (user.getChatStatus() == ChatStatus.ULIST) {// 此时为更新用户列表状态（客户端）
                         handleUList(user);
+                    } else if (user.getChatStatus() == ChatStatus.SEND_FILE) {// 此时为发送文件状态
+                        handleSendFile(user);
                     }
                 }
 
@@ -65,9 +70,16 @@ public class ServerHandler extends Thread {
 
 
     // (1)处理用户登录请求
-    private void handleLogin(User user) {
+    public void handleLogin(User user) {
         boolean userExist = DAO.isUserExist(user);// 调用DAO包的方法，判断该用户是否在数据库中存在
-        if (userExist) {// 若登录成功
+        boolean flag = true;
+        for (String name : onlineUsers) {
+            if (name.equals(user.getUsername())) {// 若用户已经登录
+                flag = false;
+            }
+        }
+
+        if (userExist && flag) {// 若登录成功
             // ①该用户变为在线
             onlineUsers.add(user.getUsername());// 将在线用户添加到在线列表
             onlineSocket.add(socket);// 将在线用户socket添加到列表
@@ -83,7 +95,7 @@ public class ServerHandler extends Thread {
             String username = user.getUsername();
             user = new User();
             user.setChatStatus(ChatStatus.NOTICE);// 切换为系统态
-            user.setNotice(">>>欢迎" + username + "上线啦！");
+            user.setNotice("欢迎" + username + "上线啦！");
             sendAll(user);// 将该信息群发给所有在线用户
             serverFrame.log(">>用户" + username + "登录成功");// 记录日志
 
@@ -101,12 +113,18 @@ public class ServerHandler extends Thread {
 
 
     // (2)处理用户的系统消息请求
-    private void handleNotice(User user) {
+    public void handleNotice(User user) {
+        String receiver = user.getReceiver();// 获取接收人
+        Socket pSocket = onlineUserMap.get(receiver);// 获取接收人对应的socket
+        IOStreamUtil.writeMessage(pSocket, user);// 给接收人发送信息
+        if (pSocket != socket) {
+            IOStreamUtil.writeMessage(socket, user);// 也给自己发送信息
+        }
     }
 
 
     // (3)处理用户的聊天请求
-    private void handleChat(User user) {
+    public void handleChat(User user) {
         String receiver = user.getReceiver();// 获取接收人
 
         // 单发or群发
@@ -124,7 +142,7 @@ public class ServerHandler extends Thread {
 
 
     // (4)处理抖动请求
-    private void handleShake(User user) {
+    public void handleShake(User user) {
         String receiver = user.getReceiver();// 获取接收人
 
         if ("ALL".equals(receiver)) {// 若接收人为ALL，则将信息发送给所有人
@@ -141,7 +159,30 @@ public class ServerHandler extends Thread {
 
 
     // (5)用于更新在线列表（客户端）
-    private void handleUList(User user) {
+    public void handleUList(User user) {
+    }
+
+
+    // (6)用于处理发送文件状态
+    //  文件到达服务器后：先存储，后转发
+    public void handleSendFile(User user) throws IOException {
+        // ①将文件存储都指定位置（所有用户发送的文件，都要在服务器中缓存）
+        String path = "D:\\Java\\javacode\\java_StudyCode\\java_12_NetworkProgramming\\_02_ChatRoom_demo01\\files\\serverFiles";// 服务器的文件存放路径
+        String fileName = user.getFileName();// 获取文件名
+        File file = new File(path, fileName);// 创建要存储的文件
+        FileOutputStream fileOutputStream = new FileOutputStream(file);// 将其转换为输出流
+        fileOutputStream.write(user.getFileBytes());// 将用户传输的文件，写道该文件中（此时，服务端成功存储该文件）
+        fileOutputStream.flush();
+        fileOutputStream.close();
+
+        // ②将文件转发给接收人
+        String receiver = user.getReceiver();
+        Socket socket1 = onlineUserMap.get(receiver);// 获取接收人对应的socket
+        if (socket1 != null && !socket1.isClosed()) {// 当接收人不为空且未下线
+            IOStreamUtil.writeMessage(socket1, user);// 将文件传给接收人
+        } else {
+            System.out.println("文件接收人不在线");
+        }
     }
 
 

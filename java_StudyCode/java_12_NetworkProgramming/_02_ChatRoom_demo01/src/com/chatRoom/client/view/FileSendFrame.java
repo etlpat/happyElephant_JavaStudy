@@ -1,10 +1,15 @@
 package com.chatRoom.client.view;
 
+import com.chatRoom.Util.IOStreamUtil;
+import com.chatRoom.javaBean.ChatStatus;
+import com.chatRoom.javaBean.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.Socket;
 
 
@@ -20,11 +25,16 @@ public class FileSendFrame extends JFrame {
     final int MAX_PROGRESS = 100;// 进度条最大进度
     int currentProgress = 0;// 当前进度
     Socket socket;
+    String sender;// 发送人
+    String receiver;// 接收人
+    FileSendFrame fileSendFrame = this;
 
 
-    public FileSendFrame(Socket socket) {
+    public FileSendFrame(Socket socket, String sender, String receiver) {
         this();
         this.socket = socket;
+        this.sender = sender;
+        this.receiver = receiver;
     }
 
 
@@ -35,7 +45,9 @@ public class FileSendFrame extends JFrame {
         setSize(frameWidth, frameHeight);// 设置窗体大小
         setLocation(screenWidth / 2 - frameWidth / 2, screenHeight / 2 - frameHeight / 2);// 设置窗体位置居中
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// 设置关闭窗体时程序自动退出
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);// 设置关闭窗体时只关闭本身
         setLayout(null);// 设置布局
+
 
         // (2)创建文件路径标签
         JLabel fileLabel = new JLabel("文件路径:");
@@ -91,13 +103,25 @@ public class FileSendFrame extends JFrame {
                     if (fieldPath.equals("") || fieldPath == null) {
                         return;
                     } else {// 处理并上传文件
-                        // 将文件读取到内存中
-//                        File file = new File(fieldPath);// 获取文件路径
-//                        FileInputStream fileInputStream = new FileInputStream(file);// 获取文件输入流
-//                        int available = fileInputStream.available();// 读取文件的字节数
-//                        byte[] bytes = new byte[available];// 创建与文件大小相等的字节数组
-//                        fileInputStream.read(bytes);// 将文件数据放入字节数组中
+                        File file = new File(fieldPath);// 获取文件
+                        FileInputStream fileInputStream = new FileInputStream(file);// 转换为文件输入流
 
+                        int available = fileInputStream.available();// 获取文件的字节数
+                        byte[] bytes = new byte[available];// 创建与文件大小相等的字节数组
+                        fileInputStream.read(bytes);// 将文件输入流读入字节数组中
+                        fileInputStream.close();// 关闭流
+                        // 此时bytes中存放了整个文件
+
+                        User user = new User();// 创建user，用于在客户端、服务端传输数据
+                        user.setChatStatus(ChatStatus.SEND_FILE);// 设置为发送文件状态
+                        user.setSender(sender);// 发送人
+                        user.setReceiver(receiver);// 接收人
+                        user.setFileBytes(bytes);// 文件的字节数组
+                        user.setFileName(file.getName());// 文件名
+
+                        IOStreamUtil.writeMessage(socket, user);// 将存放文件的user传输给socket
+                        fileSendFrame.dispose();// 关闭本窗口
+                        JOptionPane.showMessageDialog(null, "发送者成功发出文件！");// 打印提示信息
                     }
 
                 } catch (Exception e1) {
@@ -115,7 +139,7 @@ public class FileSendFrame extends JFrame {
     }
 
 
-    // 用于设置滚动条
+    // 用于设置进度条
     public void setProgressBar(JFrame jFrame) {
         // ①设置初始属性
         JProgressBar progressBar = new JProgressBar();
@@ -126,16 +150,7 @@ public class FileSendFrame extends JFrame {
         progressBar.setStringPainted(true);// 绘制百分比文本(进度条中间显示的百分数)
         jFrame.add(progressBar);
 
-//        // ②添加进度改变通知
-//        progressBar.addChangeListener(new ChangeListener() {
-//            @Override
-//            public void stateChanged(ChangeEvent e) {
-//                System.out.println("当前进度值:" + progressBar.getValue() + "; "
-//                        + "进度百分比:" + progressBar.getPercentComplete());
-//            }
-//        });
-//
-//        // ③模拟延时操作进度,每隔time毫秒更新进度
+//        // ②模拟延时操作进度,每隔time毫秒更新进度
 //        int time = 50;
 //        new Timer(time, new ActionListener() {
 //            @Override

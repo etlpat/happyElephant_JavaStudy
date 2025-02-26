@@ -200,7 +200,7 @@ public class ClientChat extends JFrame {
         jblFace.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                EmojiFrame emojiFrame = new EmojiFrame(sendPane);// 创建表情框体
+                new EmojiFrame(sendPane);// 创建表情框体
             }
         });
         return jblFace;
@@ -328,13 +328,15 @@ public class ClientChat extends JFrame {
         jbFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                // ①更新接收人
-//                receiver = receiverBox.getSelectedItem().toString();// 将接收人设为下拉框中被选中的用户
-//                if (receiver.equals("所有人")) {
-//                    receiver = "ALL";
-//                }
+                // ①更新接收人
+                receiver = receiverBox.getSelectedItem().toString();// 将接收人设为下拉框中被选中的用户
+                if (receiver.equals("所有人")) {
+                    JOptionPane.showMessageDialog(null, "只能给单个用户发送文件！");// 打印提示信息
+                    return;
+                }
 
-
+                // ②创建文件发送界面
+                new FileSendFrame(socket, username, receiver);
             }
         });
     }

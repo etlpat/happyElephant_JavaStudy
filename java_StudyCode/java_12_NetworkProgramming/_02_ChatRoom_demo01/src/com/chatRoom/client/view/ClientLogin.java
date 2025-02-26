@@ -22,6 +22,7 @@ public class ClientLogin extends JFrame {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();// 获取屏幕大小
     int screenWidth = screenSize.width;
     int screenHeight = screenSize.height;
+    ClientLogin clientLogin = this;
 
     // 定义组件
     JLabel lbUsername = new JLabel("账号：");
@@ -123,6 +124,13 @@ public class ClientLogin extends JFrame {
     // 用于设置退出按钮（点击事件）
     public void setBtExit() {
         btExit.setBounds(215, 170, 80, 25);
+        // 当点击退出，关闭窗体
+        btExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clientLogin.dispose();
+            }
+        });
     }
 
 

@@ -2,6 +2,10 @@ package com.chatRoom.server.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -16,6 +20,8 @@ public class ServerFrame extends JFrame {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();// 获取屏幕大小
     int screenWidth = screenSize.width;
     int screenHeight = screenSize.height;
+    ServerFrame serverFrame = this;
+    static int logNum = 1;// 日志编号
 
     // 添加组件
     JTextField txtNumber = new JTextField("0人", 10);// 在线人数框体
@@ -165,6 +171,14 @@ public class ServerFrame extends JFrame {
         stopBtn.setBackground(Color.WHITE);
         stopBtn.setFont(new Font("宋体", 0, 14));
         stopBtn.setBounds(200, 400, 110, 30);
+
+        // 鼠标点击事件：关闭界面
+        stopBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                serverFrame.dispose();
+            }
+        });
         return stopBtn;
     }
 
@@ -175,6 +189,30 @@ public class ServerFrame extends JFrame {
         saveLogBtn.setBackground(Color.WHITE);
         saveLogBtn.setFont(new Font("宋体", 0, 14));
         saveLogBtn.setBounds(320, 400, 110, 30);
+
+        // 鼠标点击事件：保存日志信息
+        saveLogBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String text = txtLog.getText();// 获取日志信息
+                    if (text == null || text.equals("")) {
+                        JOptionPane.showMessageDialog(null, "保存失败！");// 打印提示信息
+                    } else {
+                        String filePath = "D:\\Java\\javacode\\java_StudyCode\\java_12_NetworkProgramming" +
+                                "\\_02_ChatRoom_demo01\\files\\log\\log" + logNum + ".txt"; // 指定文件路径
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+                        writer.write(text);
+                        writer.flush();
+                        writer.close();
+                        JOptionPane.showMessageDialog(null, "写入成功！");// 打印提示信息
+                        logNum++;
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         return saveLogBtn;
     }
 

@@ -6,7 +6,8 @@ public enum ChatStatus {
     NOTICE(2, "系统消息"),
     CHAT(3, "聊天消息"),
     SHAKE(4, "抖动消息"),
-    ULIST(5, "刷新在线列表");
+    ULIST(5, "刷新在线列表"),
+    SEND_FILE(6, "发送文件");
 
     private int status;
     private String desc;
