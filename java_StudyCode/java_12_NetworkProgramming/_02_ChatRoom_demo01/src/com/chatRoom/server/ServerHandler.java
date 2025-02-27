@@ -120,6 +120,8 @@ public class ServerHandler extends Thread {
         if (pSocket != socket) {
             IOStreamUtil.writeMessage(socket, user);// 也给自己发送信息
         }
+
+        serverFrame.log(user.getSender() + "对" + user.getReceiver() + "发送" + user.getChatStatus() + "状态信息");// 记录日志
     }
 
 
@@ -137,6 +139,7 @@ public class ServerHandler extends Thread {
             if (pSocket != socket) {
                 IOStreamUtil.writeMessage(socket, user);// 也给自己发送信息
             }
+            serverFrame.log(user.getSender() + "对" + user.getReceiver() + "发送" + user.getChatStatus() + "状态信息");// 记录日志
         }
     }
 
@@ -154,6 +157,7 @@ public class ServerHandler extends Thread {
             if (pSocket != socket) {
                 IOStreamUtil.writeMessage(socket, user);// 自己也抖动
             }
+            serverFrame.log(user.getSender() + "对" + user.getReceiver() + "发送" + user.getChatStatus() + "状态信息");// 记录日志
         }
     }
 
@@ -174,6 +178,7 @@ public class ServerHandler extends Thread {
         fileOutputStream.write(user.getFileBytes());// 将用户传输的文件，写道该文件中（此时，服务端成功存储该文件）
         fileOutputStream.flush();
         fileOutputStream.close();
+        serverFrame.log("服务端存储" + user.getSender() + "的文件：" + fileName);// 记录日志
 
         // ②将文件转发给接收人
         String receiver = user.getReceiver();
@@ -183,6 +188,7 @@ public class ServerHandler extends Thread {
         } else {
             System.out.println("文件接收人不在线");
         }
+        serverFrame.log(user.getSender() + "对" + user.getReceiver() + "发送" + user.getChatStatus() + "状态信息");// 记录日志
     }
 
 
@@ -192,7 +198,7 @@ public class ServerHandler extends Thread {
             IOStreamUtil.writeMessage(socket, user);// 向所有用户发送信息
         }
 
-        serverFrame.log(user.getUsername() + "对所有用户发送" + user.getChatStatus() + "状态信息");// 记录日志
+        serverFrame.log(user.getSender() + "对所有用户发送" + user.getChatStatus() + "状态信息");// 记录日志
     }
 
 
