@@ -10,12 +10,6 @@ CREATE TABLE `user` (
 );
 
 DESC USER;
-
-INSERT INTO `user`(username,PASSWORD) 
-	VALUES('zhangsan','123456'), 
-		('lisi','123456'),
-		('wangwu','123456'),
-		('zhaoliu','123456');
 		
 INSERT INTO `user`(username,PASSWORD) 
 	VALUES('111',''), 
@@ -28,5 +22,14 @@ INSERT INTO `user`(username,PASSWORD)
 		('888',''),
 		('999',''),
 		('000','');
+
+INSERT INTO `user`(username,PASSWORD) 
+	VALUES('张三','123456'), 
+		('李四','123456'),
+		('王五','123456'),
+		('赵六','123456'),
+		('孙七','123456'),
+		('周八','123456');
+	
 		
 SELECT * FROM USER;
